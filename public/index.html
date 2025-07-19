@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 
+            --background-color: #F0F4F8; /* Light blueish background */
+            --surface-color: #FFFFFF;    /* Keep surface white */
+
+            --primary-accent-color: #2C3E50; /* Navy blue for user messages and buttons */
+            --secondary-accent-color: #16A085; /* Teal for AI orb */
+
+            --text-color: #2C3E50;        /* Dark navy for primary text */
+            --text-color-light: #7F8C8D;  /* Muted grey-blue for secondary text */
+
+            --ai-bubble-bg: #ECF0F1;      /* Soft grey for AI messages */
+            --ai-bubble-text: var(--text-color); /* AI bubble text uses primary dark text */
+
+            --user-bubble-bg: var(--primary-accent-color);
+            --user-bubble-text: #FFFFFF;
+
+            --button-text-color-on-accent: #FFFFFF;
+            --button-text-color-on-neutral: var(--text-color);
+
+            --border-color: #D0D7DE;      /* Light blue-grey border */
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+            padding: 20px;
+        }
+        #app-container {
+            width: 100%; height: 100%;
+            max-width: 768px; max-height: 900px;
+            background-color: var(--surface-color);
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1); /* Softer, lighter shadow */
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            padding: 20px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 1.25em;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+            color: var(--text-color); /* Header text color */
+        }
+        #chat-window {
+            flex-grow: 1; padding: 20px;
+            overflow-y: auto; display: flex;
+            flex-direction: column; gap: 15px;
+        }
+        .chat-message {
+            max-width: 75%; padding: 12px 18px;
+            border-radius: 20px; line-height: 1.6;
+            opacity: 0; transform: translateY(20px);
+            animation: fadeIn 0.5s forwards;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .ai-message {
+            background-color: var(--ai-bubble-bg);
+            color: var(--ai-bubble-text);
+            font-weight: 400;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+        .user-message {
+            background-color: var(--user-bubble-bg);
+            color: var(--user-bubble-text);
+            font-weight: 500;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        footer {
+            padding: 20px; display: flex;
+            flex-direction: column; align-items: center;
+            border-top: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        #user-transcript {
+            min-height: 25px; font-size: 1.1em;
+            font-style: italic; color: var(--text-color-light);
+            margin-bottom: 15px;
+        }
+        #ai-orb {
+            width: 70px; height: 70px;
+            background: radial-gradient(circle, #ADD8E6 0%, var(--secondary-accent-color) 100%);
+            border-radius: 50%; margin-bottom: 15px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 0 15px rgba(74, 144, 226, 0.4);
+        }
+        #ai-orb.listening { animation: pulse 1.2s infinite ease-in-out; }
+        .button-container { display: flex; gap: 20px; }
+        button {
+            font-size: 1em; padding: 12px 25px; cursor: pointer; border: none;
+            border-radius: 50px;
+            background-color: var(--primary-accent-color);
+            color: var(--button-text-color-on-accent);
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        button:hover {
+            background-color: #A03333;
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            background-color: #E0E0E0;
+            color: var(--text-color-light);
+            cursor: not-allowed; transform: translateY(0);
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(74, 144, 226, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 10px 20px rgba(74, 144, 226, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(74, 144, 226, 0); }
+        }
+    </style>
+</head>
+<body>
+    <div id="app-container">
+        <header>RattanIndia Voice Assistant</header>
+        <main id="chat-window">
+            <div class="chat-message ai-message">Hello! How can I help you?</div>
+        </main>
+        <footer>
+            <div id="user-transcript"></div>
+            <div id="ai-orb" aria-label="AI listening orb" role="img"></div>
+            <div class="button-container">
+                <button id="startButton">Start Recording</button>
+                <button id="stopButton" disabled>Stop Recording</button>
+            </div>
+        </footer>
+    </div>
+    <script src="app.js" defer></script>
+</body>
+</html>
